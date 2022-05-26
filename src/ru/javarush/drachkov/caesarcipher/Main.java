@@ -25,6 +25,8 @@ public class Main {
 
 
 
+
+
     }
     public static void checkingMainMenu () {
         final String  SOURCE_TEXT = "Введите адрес файла с исходным текстом";
@@ -87,11 +89,9 @@ public class Main {
 
                 }
             } catch (InvalidPathException ex) {
-                System.err.println("If the path string cannot be converted to a Path");
+                System.err.println("Такого файла не существует" + ex.getMessage());
             } catch (SecurityException ex) {
-                System.err.println("In the case of the default provider, " +
-                        "and a security manager is installed," +
-                        " its checkRead method denies read access to the file");
+                System.err.println("Это не конечный файл" + ex.getMessage());
             }
         } while (!Files.exists(Path.of(adres)) && Files.isRegularFile(Path.of(adres)));
         return Path.of(adres);
@@ -114,6 +114,34 @@ public class Main {
 
         }
         return key;
+    }
+    public static Path checkingResultText () {
+        Scanner scanner = new Scanner(System.in);
+        String result;
+
+        do {
+            result = scanner.nextLine();
+            try {
+                Path path = Path.of(result);
+                if (Files.exists(Path.of(result))) {
+                    if (Files.isRegularFile(Path.of(result))) {
+                        System.out.println("Данные приняты, подождите.");
+                    } else {
+                        System.out.println("Файл не найден, попробуйте еще раз");
+                        checkingResultText();
+                    }
+                } else {
+                    System.out.println("Неверный адрес файла, попробуйте еще раз");
+                    checkingResultText();
+                }
+            } catch (InvalidPathException ex) {
+                System.err.println("Такого файла не существует" + ex.getMessage());
+            } catch (SecurityException ex) {
+                System.err.println("Это не конечный файл" + ex.getMessage());
+            }
+        } while (!Files.exists(Path.of(result)) && Files.isRegularFile(Path.of(result))) ;
+            return Path.of(result);
+
     }
 }
 
