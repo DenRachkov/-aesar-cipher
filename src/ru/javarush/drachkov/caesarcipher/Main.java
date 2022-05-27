@@ -1,19 +1,20 @@
 package ru.javarush.drachkov.caesarcipher;
 
-import org.w3c.dom.ls.LSOutput;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+
+
+
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Scanner;
-import java.util.SplittableRandom;
+
 
 public class Main {
+    private static final char[] ALPHABET = {'а', 'б', 'в', 'г', 'д', 'е', 'ж', 'з',
+            'и','к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ',
+            'ъ', 'ы', 'ь', 'э', 'я', '.', ',', '«', '»', '"', '\'', ':', '!', '?', ' '};
 
 
     public static void main(String[] args) {
@@ -22,12 +23,9 @@ public class Main {
                 "Введите цифру 3 - если вы хотите расшифровать текс методом Brute Force");
 
         checkingMainMenu();
-
-
-
-
-
     }
+
+
     public static void checkingMainMenu () {
         final String  SOURCE_TEXT = "Введите адрес файла с исходным текстом";
 
@@ -45,16 +43,21 @@ public class Main {
             case 1:
                 System.out.println(SOURCE_TEXT);
                 checkingSourceText();
+                checkingKey();
+                checkingResultText();
 
                 break;
             case 2:
                 System.out.println(SOURCE_TEXT);
                 checkingSourceText();
+                checkingKey();
+                checkingResultText();
 
                 break;
             case 3:
                 System.out.println(SOURCE_TEXT );
                 checkingSourceText();
+                checkingResultText();
                 break;
 
             default:
@@ -77,7 +80,7 @@ public class Main {
                 if (Files.exists(Path.of(adres))) {
 
                     if (Files.isRegularFile(Path.of(adres))){
-                        System.out.println("Введите ключ");
+                        System.out.println("Адрес принят");
                     } else {
                         System.out.println("Файл не найден, попробуйте еще раз.");
                         checkingSourceText();
@@ -98,12 +101,13 @@ public class Main {
     }
     public static int checkingKey () {
 
+        System.out.println("Введите ключ");
         Scanner scanner = new Scanner(System.in);
         int key = 0;
         try {
             key = scanner.nextInt();
             if (key >= 0 & key <= 26) {
-                System.out.println("Введите адрес файла, в который нужно записать результат.");
+                System.out.println("Ключ принят");
             }else {
                 System.out.println("Вы ввели несоответствующий ключ, повторите попытку:");
                 checkingKey();
@@ -116,6 +120,7 @@ public class Main {
         return key;
     }
     public static Path checkingResultText () {
+        System.out.println("Введите адрес файла, в который нужно записать результат.");
         Scanner scanner = new Scanner(System.in);
         String result;
 
@@ -143,5 +148,9 @@ public class Main {
             return Path.of(result);
 
     }
+
+
+
+
 }
 
