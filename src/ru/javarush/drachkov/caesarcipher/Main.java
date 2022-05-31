@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.security.Key;
 import java.util.*;
 
 
@@ -20,7 +18,7 @@ public class Main {
             'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args)  {
         System.out.println("Шифр Цезаря\n" + "Введите цифру 1 - если вы хотите зашифровать текст\n" +
                 "Введите цифру 2 - если вы хотите расшифровать текст\n" +
                 "Введите цифру 3 - если вы хотите расшифровать текс методом Brute Force");
@@ -30,9 +28,7 @@ public class Main {
 
     }
 
-
     public static void checkingMainMenu() {
-        final String SOURCE_TEXT = "Введите адрес файла с исходным текстом";
 
         Scanner scanner = new Scanner(System.in);
         int num = 0;
@@ -45,19 +41,15 @@ public class Main {
 
         switch (num) {
             case 1:
+                fileRecordingEncryption();
 
                 break;
             case 2:
-                System.out.println(SOURCE_TEXT);
-                checkingSourceText();
-                checkingKey();
-                checkingResultText();
+                fileRecordingDecryption();
 
                 break;
             case 3:
-                System.out.println(SOURCE_TEXT);
-                checkingSourceText();
-                checkingResultText();
+                System.out.println("Данная опция временно в разработке\n" + "Приходите позднее.");
                 break;
 
             default:
@@ -78,18 +70,18 @@ public class Main {
 
 
             try {
-                Path path = Path.of(adres);
+
                 if (Files.exists(Path.of(adres))) {
 
                     if (Files.isRegularFile(Path.of(adres))) {
                         System.out.println("Адрес принят");
                     } else {
-                        System.out.println("Файл не найден, попробуйте еще раз.");
+                        System.out.println("Файл не найден, попробуйте еще раз:");
                         checkingSourceText();
 
                     }
                 } else {
-                    System.out.println("Неверный адрес файла, попробуйте еще раз.");
+                    System.out.println("Неверный адрес файла, попробуйте еще раз:");
                     checkingSourceText();
 
                 }
@@ -104,19 +96,19 @@ public class Main {
 
     public static int checkingKey() {
 
-        System.out.println("Введите ключ");
+        System.out.println("Введите ключ от 1 до " + ALPHABET.size());
         Scanner scanner = new Scanner(System.in);
         int key = 0;
         try {
             key = scanner.nextInt();
-            if (key >= 0 & key <= 81) {
+            if (key > 0 & key <= ALPHABET.size()) {
                 System.out.println("Ключ принят");
             } else {
                 System.out.println("Вы ввели несоответствующий ключ, повторите попытку:");
                 checkingKey();
             }
         } catch (InputMismatchException ex) {
-            System.err.println("Вы ввели не число, повторите попытку: ");
+            System.err.println("Вы ввели не число, повторите попытку: " );
             checkingKey();
 
         }
@@ -134,7 +126,7 @@ public class Main {
                 Path path = Path.of(result);
                 if (Files.exists(Path.of(result))) {
                     if (Files.isRegularFile(Path.of(result))) {
-                        System.out.println("Данные приняты, подождите.");
+                        System.out.println("Данные приняты.");
 
 
                     } else {
@@ -163,25 +155,42 @@ public class Main {
         try {
             list = Files.readAllLines(path);
         } catch (IOException e) {
-            System.err.println("Ошибка чтения входящего файла");
+            System.err.println("Ошибка чтения входящего файла" + e.getMessage());
         }
         return list;
     }
 
-    /*public static void fileRecordingEncryption() {
+    public static void fileRecordingEncryption() {
         List<String> newList = new ArrayList<>();
-        for (String str2 : fileReading(checkingSourceText())) {
-            newList.add(encryption(str2, checkingKey()));
+        int key = checkingKey();
+        for (String str : fileReading(checkingSourceText())) {
+            newList.add(encryption(str, key));
         }
-        newList = Files.write();
-    }*/
+        try {
+            Files.write(checkingResultText(), newList);
+        }catch (IOException e) {
+            System.err.println("Ошибка записи файлов" + e.getMessage());
+        }
+        System.out.println("Готово. Всего хорошего!");
+    }
 
-
-
+    public static void fileRecordingDecryption() {
+        List<String> newList = new ArrayList<>();
+        int key = checkingKey();
+        for (String str : fileReading(checkingSourceText())) {
+            newList.add(decryption(str,key));
+        }
+        try {
+            Files.write(checkingResultText(),newList);
+        }catch (IOException e) {
+            System.err.println("Ошибка записи файлов" + e.getMessage());
+        }
+        System.out.println("Готово. Всего хорошего!");
+    }
 
     public static String encryption(String str, int key) {
 
-        StringBuilder result = new StringBuilder(str);
+        StringBuilder result = new StringBuilder();
 
         for (char text : str.toCharArray()) {
 
@@ -200,7 +209,7 @@ public class Main {
 
     public static String decryption(String str, int key) {
 
-        StringBuilder result = new StringBuilder(str);
+        StringBuilder result = new StringBuilder();
 
         for (char text : str.toCharArray()) {
 
