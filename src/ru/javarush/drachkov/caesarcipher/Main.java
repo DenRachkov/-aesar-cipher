@@ -1,8 +1,6 @@
 package ru.javarush.drachkov.caesarcipher;
 
 
-import com.sun.source.tree.BreakTree;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
@@ -17,15 +15,14 @@ public class Main {
             'Е', 'Ж', 'З', 'И', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ',
             'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
 
-
     public static void main(String[] args)  {
-        System.out.println("Шифр Цезаря\n" + "Введите цифру 1 - если вы хотите зашифровать текст\n" +
-                "Введите цифру 2 - если вы хотите расшифровать текст\n" +
-                "Введите цифру 3 - если вы хотите расшифровать текс методом Brute Force");
+        System.out.println("""
+                Шифр Цезаря
+                Введите цифру 1 - если вы хотите зашифровать текст
+                Введите цифру 2 - если вы хотите расшифровать текст
+                Введите цифру 3 - если вы хотите расшифровать текс методом Brute Force""");
 
         checkingMainMenu();
-
-
     }
 
     public static void checkingMainMenu() {
@@ -40,23 +37,13 @@ public class Main {
         }
 
         switch (num) {
-            case 1:
-                fileRecordingEncryption();
-
-                break;
-            case 2:
-                fileRecordingDecryption();
-
-                break;
-            case 3:
-                System.out.println("Данная опция временно в разработке\n" + "Приходите позднее.");
-                break;
-
-            default:
+            case 1 -> fileRecordingEncryption();
+            case 2 -> fileRecordingDecryption();
+            case 3 -> System.out.println("Данная опция временно в разработке\n" + "Приходите позднее.");
+            default -> {
                 System.out.println("Вы ввели не то число, повторите еще раз.");
                 checkingMainMenu();
-
-
+            }
         }
     }
 
@@ -123,7 +110,7 @@ public class Main {
         do {
             result = scanner.nextLine();
             try {
-                Path path = Path.of(result);
+
                 if (Files.exists(Path.of(result))) {
                     if (Files.isRegularFile(Path.of(result))) {
                         System.out.println("Данные приняты.");
